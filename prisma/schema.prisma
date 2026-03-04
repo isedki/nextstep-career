@@ -1,0 +1,75 @@
+// NextStep Career Profile MVP - Prisma Schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String?        @unique
+  name          String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  
+  // Relations
+  assessments   Assessment[]
+  profile       CareerProfile?
+  apiKeys       UserAPIKey[]
+}
+
+model UserAPIKey {
+  id           String   @id @default(cuid())
+  userId       String
+  provider     String   // 'openai' | 'anthropic'
+  encryptedKey String
+  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, provider])
+}
+
+model Assessment {
+  id           String    @id @default(cuid())
+  userId       String
+  answers      String    // JSON string of answers
+  currentPhase String    @default("core") // 'core' | 'burnout' | 'workstyle' | 'motivators' | 'skills'
+  completedAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CareerProfile {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Raw assessment data
+  coreAnswers         String?  // JSON
+  burnoutAnswers      String?  // JSON (optional deep dive)
+  workstyleAnswers    String?  // JSON (optional deep dive)
+  motivatorsAnswers   String?  // JSON (optional deep dive)
+  skillsAnswers       String?  // JSON (optional deep dive)
+  
+  // Computed scores (JSON)
+  psychologyProfile   String?  // { hollandCode, careerAnchor, sdtNeeds, bigFive, burnout }
+  diagnoses           String?  // Array of diagnosed issues with evidence
+  insights            String?  // "Why you feel X" explanations
+  
+  // Skills (JSON)
+  skills              String?  // Array of skills with levels and evidence
+  
+  // Completion status
+  coreComplete        Boolean  @default(false)
+  burnoutComplete     Boolean  @default(false)
+  workstyleComplete   Boolean  @default(false)
+  motivatorsComplete  Boolean  @default(false)
+  skillsComplete      Boolean  @default(false)
+  
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}

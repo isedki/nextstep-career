@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warm, human-centered color palette */
+    --background: 40 33% 98%;
+    --foreground: 30 10% 15%;
+    --card: 40 30% 99%;
+    --card-foreground: 30 10% 15%;
+    --popover: 40 30% 99%;
+    --popover-foreground: 30 10% 15%;
+    --primary: 24 70% 50%;
+    --primary-foreground: 40 30% 99%;
+    --secondary: 40 20% 94%;
+    --secondary-foreground: 30 10% 25%;
+    --muted: 40 15% 92%;
+    --muted-foreground: 30 8% 45%;
+    --accent: 165 60% 40%;
+    --accent-foreground: 40 30% 99%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 40 30% 99%;
+    --border: 40 15% 88%;
+    --input: 40 15% 88%;
+    --ring: 24 70% 50%;
+    --radius: 0.75rem;
+    
+    /* Custom colors */
+    --success: 142 71% 45%;
+    --warning: 38 92% 50%;
+    --info: 199 89% 48%;
+    
+    /* Chart colors */
+    --chart-1: 24 70% 50%;
+    --chart-2: 165 60% 40%;
+    --chart-3: 199 89% 48%;
+    --chart-4: 38 92% 50%;
+    --chart-5: 280 65% 60%;
+  }
+
+  .dark {
+    --background: 30 15% 8%;
+    --foreground: 40 20% 95%;
+    --card: 30 12% 12%;
+    --card-foreground: 40 20% 95%;
+    --popover: 30 12% 12%;
+    --popover-foreground: 40 20% 95%;
+    --primary: 24 75% 55%;
+    --primary-foreground: 30 15% 8%;
+    --secondary: 30 10% 18%;
+    --secondary-foreground: 40 20% 90%;
+    --muted: 30 10% 18%;
+    --muted-foreground: 40 10% 60%;
+    --accent: 165 55% 45%;
+    --accent-foreground: 30 15% 8%;
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 40 20% 95%;
+    --border: 30 10% 20%;
+    --input: 30 10% 20%;
+    --ring: 24 75% 55%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Fraunces', serif;
+    @apply font-semibold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Glass effect */
+  .glass {
+    @apply bg-white/70 dark:bg-black/50 backdrop-blur-xl;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+
+  /* Smooth animations */
+  .animate-in {
+    animation: animateIn 0.5s ease-out forwards;
+  }
+
+  @keyframes animateIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Stagger children animations */
+  .stagger-children > * {
+    @apply animate-in;
+  }
+  .stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+  .stagger-children > *:nth-child(2) { animation-delay: 50ms; }
+  .stagger-children > *:nth-child(3) { animation-delay: 100ms; }
+  .stagger-children > *:nth-child(4) { animation-delay: 150ms; }
+  .stagger-children > *:nth-child(5) { animation-delay: 200ms; }
+  .stagger-children > *:nth-child(6) { animation-delay: 250ms; }
+  .stagger-children > *:nth-child(7) { animation-delay: 300ms; }
+  .stagger-children > *:nth-child(8) { animation-delay: 350ms; }
+
+  /* Card hover effects */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  /* Selection styling */
+  .option-card {
+    @apply relative cursor-pointer rounded-xl border-2 border-transparent p-4 transition-all duration-200;
+    @apply hover:border-primary/30 hover:bg-primary/5;
+  }
+
+  .option-card.selected {
+    @apply border-primary bg-primary/10;
+  }
+
+  .option-card.selected::before {
+    content: '';
+    @apply absolute inset-0 rounded-xl ring-2 ring-primary/20;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-muted rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/30 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/50;
+}
