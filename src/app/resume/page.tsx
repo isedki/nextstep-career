@@ -38,7 +38,7 @@ export default function ResumePage() {
 
   const { resume, setResume, clearResume } = useResumeStore();
   const { hasAIKey } = useSessionStore();
-  const { answers, textAnswers, completedPhases } = useAssessmentStore();
+  const { answers, completedPhases } = useAssessmentStore();
 
   useEffect(() => {
     setMounted(true);
@@ -68,7 +68,7 @@ export default function ResumePage() {
     setAnalysis(null);
 
     try {
-      const profile = generateCareerProfile(answers, textAnswers);
+      const profile = generateCareerProfile(answers);
       const jobProfile = generateIdealJobProfile(profile, answers);
       
       const result = await analyzeResume(resumeText, profile, jobProfile);
@@ -79,7 +79,7 @@ export default function ResumePage() {
       } else {
         setError(result.error || 'Analysis failed');
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to analyze resume. Please try again.');
     } finally {
       setIsAnalyzing(false);

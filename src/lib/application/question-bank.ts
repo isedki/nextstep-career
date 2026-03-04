@@ -1,4 +1,4 @@
-import { CareerProfile, CareerAnchor, Diagnosis } from '../types';
+import { CareerProfile, CareerAnchor } from '../types';
 import { Job } from '../jobs/api';
 import { Expectations } from '../expectations/store';
 import { 

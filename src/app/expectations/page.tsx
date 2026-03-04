@@ -55,8 +55,7 @@ export default function ExpectationsPage() {
     setSalaryExpectation,
     setWorkLifeExpectation,
     setRoleLevelExpectation,
-    completeExpectations,
-    isComplete
+    completeExpectations
   } = useExpectationsStore();
 
   useEffect(() => {
@@ -74,7 +73,7 @@ export default function ExpectationsPage() {
   const currentCategoryKey = categories[currentCategory];
   const progress = ((currentCategory + 1) / categories.length) * 100;
 
-  const getQuestions = (): ExpectationQuestion[] => {
+  const currentQuestions: ExpectationQuestion[] = (() => {
     switch (currentCategoryKey) {
       case 'salary':
         return salaryQuestions;
@@ -85,7 +84,8 @@ export default function ExpectationsPage() {
       default:
         return [];
     }
-  };
+  })();
+  void currentQuestions;
 
   const handleNext = () => {
     if (currentCategory < categories.length - 1) {

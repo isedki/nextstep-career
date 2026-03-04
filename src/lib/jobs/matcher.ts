@@ -2,12 +2,7 @@ import { Job } from './api';
 import { IdealCompanyProfile } from '../recommendations/company-profile';
 import { IdealJobProfile } from '../recommendations/job-profile';
 import { companyDatabase } from '../recommendations/company-database';
-import { 
-  Expectations, 
-  SalaryExpectations, 
-  WorkLifeExpectations, 
-  RoleLevelExpectations 
-} from '../expectations/store';
+import { Expectations } from '../expectations/store';
 
 // ============================================
 // Job Matching Algorithm

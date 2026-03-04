@@ -1,13 +1,8 @@
 import { callAI, useSessionStore } from '../session';
-import { CareerProfile, Diagnosis } from '../types';
+import { CareerProfile } from '../types';
 import { Job } from '../jobs/api';
 import { Expectations } from '../expectations/store';
-import { 
-  WhatMattersGuidance, 
-  KeyPoint, 
-  InterviewQuestion, 
-  Flag 
-} from '../resume/types';
+import { WhatMattersGuidance } from '../resume/types';
 import { generateFallbackWhatMatters } from './question-bank';
 
 // ============================================

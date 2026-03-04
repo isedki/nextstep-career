@@ -102,8 +102,8 @@ Respond in valid JSON with this exact structure:
 
 function buildAnalysisUserPrompt(
   resumeText: string,
-  profile: CareerProfile,
-  jobProfile?: IdealJobProfile
+  _profile: CareerProfile,
+  _jobProfile?: IdealJobProfile
 ): string {
   return `Analyze this resume:
 
@@ -174,9 +174,9 @@ function analyzeResumeFallback(
   // Check for Presence of Key Sections
   // ========================================
   const hasSummary = /summary|objective|profile|about/i.test(resumeText);
-  const hasExperience = /experience|employment|work history/i.test(resumeText);
+  const _hasExperience = /experience|employment|work history/i.test(resumeText);
   const hasSkills = /skills|technologies|tools|proficiencies/i.test(resumeText);
-  const hasEducation = /education|degree|university|college/i.test(resumeText);
+  const _hasEducation = /education|degree|university|college/i.test(resumeText);
 
   if (!hasSummary) {
     suggestions.push({

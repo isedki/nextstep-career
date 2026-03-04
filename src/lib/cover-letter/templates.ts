@@ -9,7 +9,7 @@ export function generateFallbackCoverLetter(
   input: CoverLetterInput,
   profile: CareerProfile,
   resumeText: string,
-  userName?: string
+  _userName?: string
 ): CoverLetterResult {
   const anchor = profile.psychology.careerAnchor.primary;
   const template = getTemplateByAnchor(anchor);
@@ -126,7 +126,7 @@ function getTemplateByAnchor(anchor: CareerAnchor): CoverLetterTemplate {
 
 function extractAchievements(resumeText: string): string[] {
   const achievements: string[] = [];
-  const textLower = resumeText.toLowerCase();
+  const _textLower = resumeText.toLowerCase();
   
   const achievementPatterns = [
     /(?:led|managed|built|developed|created|implemented|launched|delivered|increased|reduced|improved|designed|architected)[^.]{20,100}\./gi,

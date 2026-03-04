@@ -27,7 +27,7 @@ import { generateCoverLetter } from '@/lib/cover-letter/generator';
 import { generateWhatMatters } from '@/lib/application/what-matters';
 import { useResumeStore } from '@/lib/resume/analyzer';
 import { useSessionStore } from '@/lib/session';
-import { CoverLetterResult, WhatMattersGuidance, Flag, KeyPoint, InterviewQuestion } from '@/lib/resume/types';
+import { CoverLetterResult, WhatMattersGuidance, Flag } from '@/lib/resume/types';
 
 interface ApplicationPanelProps {
   job: Job;
@@ -112,6 +112,7 @@ export function ApplicationPanel({
     if (activeTab === 'what_matters' && !whatMatters) {
       handleGenerateWhatMatters();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
   return (
