@@ -73,3 +73,52 @@ model CareerProfile {
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 }
+
+// ============================================
+// Job Role Database - For ATS Optimization
+// ============================================
+
+model JobRole {
+  id          String   @id @default(cuid())
+  title       String   @unique
+  slug        String   @unique
+  department  String   // Executive, Solutions, Sales, CustomerSuccess, Product, Engineering
+  level       String   // IC, Manager, Director, VP, CSuite
+  description String?
+  
+  keywords    JobKeyword[]
+  salaryBands SalaryBand[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([department])
+  @@index([level])
+}
+
+model JobKeyword {
+  id        String  @id @default(cuid())
+  keyword   String
+  weight    Int     @default(1)  // 1 = nice-to-have, 2 = important, 3 = critical
+  type      String  // 'skill' | 'tool' | 'certification' | 'trait' | 'metric'
+  roleId    String
+  role      JobRole @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  
+  @@index([roleId])
+  @@index([keyword])
+}
+
+model SalaryBand {
+  id        String  @id @default(cuid())
+  region    String  // 'US' | 'US-SF' | 'US-NYC' | 'EU' | 'UK' | 'Remote'
+  minSalary Int
+  maxSalary Int
+  currency  String  @default("USD")
+  source    String? // 'levels.fyi' | 'glassdoor' | 'builtin' | 'manual'
+  year      Int
+  roleId    String
+  role      JobRole @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  
+  @@index([roleId])
+  @@index([region])
+}

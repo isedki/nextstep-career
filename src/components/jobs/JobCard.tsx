@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { ExternalLink, MapPin, Building2, DollarSign, Clock, CheckCircle, AlertTriangle, Star, ChevronDown, ChevronUp, FileText } from 'lucide-react';
+import { ExternalLink, MapPin, Building2, DollarSign, Clock, CheckCircle, AlertTriangle, Star, ChevronDown, ChevronUp, FileText, Zap } from 'lucide-react';
+import Link from 'next/link';
 import { ScoredJob } from '@/lib/jobs/matcher';
 import { CareerProfile } from '@/lib/types';
 import { Expectations } from '@/lib/expectations/store';
@@ -195,6 +196,15 @@ export function JobCard({ job, index, profile, expectations, userName }: JobCard
         </span>
         
         <div className="flex items-center gap-2">
+          <Link 
+            href={`/ats?jd=${encodeURIComponent(job.description.slice(0, 500))}`}
+            className="inline-flex"
+          >
+            <Button variant="ghost" size="sm">
+              <Zap className="w-4 h-4 mr-1" />
+              ATS Check
+            </Button>
+          </Link>
           {profile && (
             <Button 
               variant="outline" 
