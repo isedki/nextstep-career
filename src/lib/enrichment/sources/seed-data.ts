@@ -1,28 +1,17 @@
 import type { DataSource, RoleEnrichment, SalaryInfo } from '../types';
-import prisma from '@/lib/db/prisma';
+import { getStaticRoles, getStaticRoleBySlug } from '@/lib/db/static-roles';
 
 export class SeedDataSource implements DataSource {
   name = 'seed-data';
   confidence = 0.7;
 
   async isAvailable(): Promise<boolean> {
-    try {
-      const count = await prisma.jobRole.count();
-      return count > 0;
-    } catch {
-      return false;
-    }
+    return true;
   }
 
   async fetchRoleData(roleSlug: string): Promise<RoleEnrichment | null> {
     try {
-      const role = await prisma.jobRole.findUnique({
-        where: { slug: roleSlug },
-        include: {
-          keywords: true,
-          salaryBands: true,
-        },
-      });
+      const role = getStaticRoleBySlug(roleSlug);
 
       if (!role) return null;
 
@@ -43,21 +32,7 @@ export class SeedDataSource implements DataSource {
 
   async fetchKeywords(query: string): Promise<string[]> {
     try {
-      const roles = await prisma.jobRole.findMany({
-        where: {
-          OR: [
-            { title: { contains: query } },
-            { keywords: { some: { keyword: { contains: query } } } },
-          ],
-        },
-        include: {
-          keywords: {
-            orderBy: { weight: 'desc' },
-            take: 10,
-          },
-        },
-        take: 5,
-      });
+      const roles = getStaticRoles(undefined, undefined, query);
 
       const keywords = new Set<string>();
       for (const role of roles) {
@@ -74,17 +49,22 @@ export class SeedDataSource implements DataSource {
 
   async fetchSalaryData(role: string, region: string): Promise<SalaryInfo | null> {
     try {
-      const salaryBand = await prisma.salaryBand.findFirst({
-        where: {
-          role: {
-            OR: [
-              { slug: role },
-              { title: { contains: role } },
-            ],
-          },
-          region: { contains: region },
-        },
-      });
+      const roleData = getStaticRoleBySlug(role);
+      
+      if (!roleData) {
+        const roles = getStaticRoles(undefined, undefined, role);
+        if (roles.length === 0) return null;
+        const salaryBand = roles[0].salaryBands.find(s => s.region.includes(region));
+        if (!salaryBand) return null;
+        return {
+          region: salaryBand.region,
+          min: salaryBand.minSalary,
+          max: salaryBand.maxSalary,
+          currency: salaryBand.currency,
+        };
+      }
+
+      const salaryBand = roleData.salaryBands.find(s => s.region.includes(region));
 
       if (!salaryBand) return null;
 
