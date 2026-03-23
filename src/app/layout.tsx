@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Navigation } from "@/components/layout/Navigation";
 
 export const metadata: Metadata = {
-  title: "NextStep - Career Profile",
-  description: "Discover what's really wrong at work and find something better. Psychology-grounded career assessment.",
+  title: "NextStep - Career Coach",
+  description: "Psychology-grounded career assessment and job search optimization tools.",
 };
 
 export default function RootLayout({
@@ -14,6 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen bg-background">
+        <Navigation />
         <main className="relative">
           {children}
         </main>
