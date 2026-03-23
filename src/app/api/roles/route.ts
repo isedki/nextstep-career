@@ -1,51 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/db/prisma';
+import { getStaticRoles } from '@/lib/db/static-roles';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const department = searchParams.get('department');
-    const level = searchParams.get('level');
-    const q = searchParams.get('q');
+    const department = searchParams.get('department') || undefined;
+    const level = searchParams.get('level') || undefined;
+    const q = searchParams.get('q') || undefined;
 
-    const where: Record<string, unknown> = {};
-
-    if (department) {
-      where.department = department;
-    }
-
-    if (level) {
-      where.level = level;
-    }
-
-    if (q) {
-      where.OR = [
-        { title: { contains: q } },
-        { description: { contains: q } },
-        { keywords: { some: { keyword: { contains: q } } } },
-      ];
-    }
-
-    const roles = await prisma.jobRole.findMany({
-      where,
-      include: {
-        keywords: {
-          orderBy: { weight: 'desc' },
-          take: 10,
-        },
-        salaryBands: {
-          where: { region: 'US' },
-          take: 1,
-        },
-      },
-      orderBy: [
-        { department: 'asc' },
-        { level: 'asc' },
-        { title: 'asc' },
-      ],
-    });
+    const roles = getStaticRoles(department, level, q);
 
     const formattedRoles = roles.map((role) => ({
       id: role.id,

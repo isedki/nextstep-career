@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/db/prisma';
+import { getStaticRoleBySlug } from '@/lib/db/static-roles';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,17 +10,7 @@ export async function GET(
   try {
     const { slug } = await params;
 
-    const role = await prisma.jobRole.findUnique({
-      where: { slug },
-      include: {
-        keywords: {
-          orderBy: { weight: 'desc' },
-        },
-        salaryBands: {
-          orderBy: { region: 'asc' },
-        },
-      },
-    });
+    const role = getStaticRoleBySlug(slug);
 
     if (!role) {
       return NextResponse.json(
